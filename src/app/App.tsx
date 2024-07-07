@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Center } from '../shared/ui'
 import { CubeGame } from '@/widgets/cubeGame'
 import { useEffect } from 'react'
-import { authWithSid, login } from '@/entities/user'
+import { login } from '@/entities/user'
 
 const AppWrapper = styled.div`
   background: linear-gradient(
