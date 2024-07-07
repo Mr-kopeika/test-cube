@@ -1,12 +1,11 @@
-import C from './Cube.module.scss';
+import C from './Cube.module.scss'
 
 type CubeProps = {
-  value: number;
-  isReRoll: boolean;
+  value: number
+  isReRoll: boolean
 }
 
 export const Cube = (props: CubeProps) => {
-
   return (
     <div className={C.container}>
       <div className={`${C.dice} ${props.isReRoll ? C.reRoll : ''}`} data-side={props.value}>

@@ -11,3 +11,8 @@ export interface IUser {
   login: string
   balance: number
 }
+
+export interface ILoginData {
+  login: string
+  password: string
+}

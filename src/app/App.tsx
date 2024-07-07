@@ -1,8 +1,6 @@
 import styled from 'styled-components'
 import { Center } from '../shared/ui'
 import { CubeGame } from '@/widgets/cubeGame'
-import { useEffect } from 'react'
-import { login } from '@/entities/user'
 
 const AppWrapper = styled.div`
   background: linear-gradient(
@@ -17,12 +15,6 @@ const AppWrapper = styled.div`
 `
 
 function App() {
-  useEffect(() => {
-    login('test_player_try', 'test_player_try').then((result) => console.log(result))
-    // authWithSid().then((user) => console.log(user))
-    console.log(document.cookie)
-  })
-
   return (
     <AppWrapper>
       <Center>

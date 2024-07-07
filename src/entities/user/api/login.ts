@@ -1,21 +1,15 @@
 import axios from 'axios'
-import { IUser } from '../model/User'
+import { IUser, ILoginData } from '../model/User'
 
-export async function login(login: string, password: string) {
-  try {
-    const { data, headers } = await axios.post<IUser>(
-      `${import.meta.env.VITE_BASE_URL}/api/client-login`,
-      {
-        login,
-        password,
-      },
-      { withCredentials: true },
-    )
+export async function login(params: ILoginData) {
+  const { data } = await axios.post<IUser>(
+    `${import.meta.env.VITE_BASE_URL}/api/client-login`,
+    {
+      login: params.login,
+      password: params.password,
+    },
+    { withCredentials: true },
+  )
 
-    console.log(headers['set-cookie'])
-    return data
-  } catch (err) {
-    console.log(err)
-    return new Error()
-  }
+  return data
 }
