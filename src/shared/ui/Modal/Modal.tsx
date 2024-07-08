@@ -33,6 +33,12 @@ const StyledWrapper = styled.div`
     border-radius: 4px;
   }
 
+  @media (max-width: 450px) {
+    .modal_content {
+      padding: 50px 20px;
+    }
+  }
+
   .active_content {
   }
 `
