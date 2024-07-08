@@ -1,5 +1,4 @@
 export * from './ui/SignIn'
-export * from './model/User'
-export * from './model/index'
+export * from '../../shared/model/User'
 export * from './api/authWithSid'
 export * from './api/login'

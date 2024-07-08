@@ -2,10 +2,12 @@ import { mainTheme } from '@/shared/config/theme'
 import ReactSelect from 'react-select'
 
 type SelectProps = {
-  $options?: { label: string; value: string }[]
+  $options: { label: string; value: string }[]
   width?: string
   height?: string
   tabIndex?: number
+  value: { value: string; label: string }
+  setValue: (value: { value: string; label: string }) => void
 }
 
 export const Select = (props: SelectProps) => {
@@ -13,7 +15,8 @@ export const Select = (props: SelectProps) => {
     <ReactSelect
       tabIndex={props.tabIndex}
       options={props.$options}
-      defaultValue={props.$options ? props.$options[0] : undefined}
+      value={props.value}
+      onChange={(newValue) => newValue && props.setValue(newValue)}
       styles={{
         indicatorSeparator: (baseStyles) => ({
           ...baseStyles,

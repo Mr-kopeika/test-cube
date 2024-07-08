@@ -5,6 +5,11 @@
   align-items: center;
   justify-content: center;
   perspective: 1000px;
+
+  @media (max-width: 750px) {
+    align-items: end;
+    height: 150px;
+  }
 }
 
 .dice {

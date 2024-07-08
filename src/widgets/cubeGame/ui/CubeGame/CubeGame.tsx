@@ -4,8 +4,16 @@ import { useState } from 'react'
 import { RadioButtonWithInput } from '../RadioButtonWithInput/RadioButtonWithInput'
 import styled from 'styled-components'
 import { useUnit } from 'effector-react'
-import { $user } from '@/widgets/signIn'
-import { $gameMessages } from '@/pages/game/model'
+import {
+  $gameMessages,
+  $secondMessage,
+  $user,
+  updateBalance,
+  updateBalanceHandler,
+  updateMessage,
+  updateSecondMessage,
+  updateSecondMessageHandler,
+} from '@/shared/model'
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -38,30 +46,83 @@ const StyledMessage = styled.span`
   color: white;
   position: absolute;
   top: -50px;
+
+  @media (max-height: 750px) {
+    top: 0;
+  }
 `
 
 const StyledSecondMessage = styled(StyledMessage)`
   font-size: ${(props) => props.theme.fontSize.medium};
   font-weight: ${(props) => props.theme.fontWeight.normal};
   top: -22px;
+
+  @media (max-height: 750px) {
+    top: 20px;
+  }
 `
+$user.on(updateBalance, updateBalanceHandler)
+$secondMessage.on(updateSecondMessage, updateSecondMessageHandler)
 
 export const CubeGame = () => {
   const user = useUnit($user)
   const messages = useUnit($gameMessages)
+  const [updateMessageFn, updateSecondMessageFn] = useUnit([updateMessage, updateSecondMessage])
+  const [updateBalanceFn] = useUnit([updateBalance])
   const [cubeValue, setCubeValue] = useState(1)
   const [reRoll, setReRoll] = useState(false)
   const [currentRadio, setCurrentRadio] = useState('')
+  const [selectedNumber, setSelectedValue] = useState(cubeNumberOptions[0].value)
+  const [bet, setBet] = useState(betOptions[0])
 
   const playHandler = () => {
     const newValue = Math.floor(Math.random() * 6) + 1
     setCubeValue(newValue)
     setReRoll(!reRoll)
+
+    setTimeout(() => {
+      updateMessageFn('Результат броска кубика: ' + newValue)
+      calculateNewBalance(newValue)
+    }, 700)
   }
 
-  const radioHandler: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setCurrentRadio(event.target.value)
+  const calculateNewBalance = (cubeValue: number) => {
+    if (!user) return
+    const currentBalance = user?.balance
+    if (isWinner(cubeValue) && currentRadio === 'number') {
+      const win = Number(bet.value) * 3
+      updateBalanceFn(currentBalance + win)
+      updateSecondMessageFn('Вы выиграли ' + win + ' TND!')
+    } else if (isWinner(cubeValue) && currentRadio !== 'number') {
+      const win = Number(bet.value) * 2
+      updateBalanceFn(currentBalance + win)
+      updateSecondMessageFn('Вы выиграли ' + win + ' TND!')
+    } else {
+      updateBalanceFn(currentBalance - Number(bet.value))
+      updateSecondMessageFn('Повезет в следующий раз')
+    }
   }
+
+  const isWinner = (cubeValue: number) => {
+    switch (currentRadio) {
+      case 'even':
+        return cubeValue % 2 === 0
+      case 'odd':
+        return cubeValue % 2 === 1
+      case '1to3':
+        return cubeValue < 4
+      case '4to6':
+        return cubeValue > 3
+      case 'number':
+        return cubeValue.toString() == selectedNumber
+    }
+  }
+
+  const radioHandler: React.ChangeEventHandler<HTMLInputElement> = (event) =>
+    setCurrentRadio(event.target.value)
+
+  const selectNumberHandler: React.ChangeEventHandler<HTMLSelectElement> = (event) =>
+    setSelectedValue(event.target.value)
 
   return (
     <StyledFlex direction='column' width='fit-content'>
@@ -73,7 +134,13 @@ export const CubeGame = () => {
 
       <StyledWrapper>
         <StyledSpan>Размер ставки</StyledSpan>
-        <Select $options={betOptions} width='100%' tabIndex={!user ? -1 : 0} />
+        <Select
+          $options={betOptions}
+          width='100%'
+          tabIndex={!user ? -1 : 0}
+          value={bet}
+          setValue={setBet}
+        />
       </StyledWrapper>
 
       <StyledWrapper>
@@ -99,14 +166,14 @@ export const CubeGame = () => {
             <RadioButton
               label='От 1 до 3'
               name='event'
-              value='1To3'
+              value='1to3'
               width='165px'
               onChange={radioHandler}
             />
             <RadioButton
               label='От 4 до 6'
               name='event'
-              value='4To6'
+              value='4to6'
               width='165px'
               onChange={radioHandler}
             />
@@ -116,15 +183,17 @@ export const CubeGame = () => {
             width='100%'
             name='event'
             radioValue='number'
+            selectValue={selectedNumber}
             currentChecked={currentRadio}
             onRadioChange={radioHandler}
             selectOptions={cubeNumberOptions}
+            onSelectChange={selectNumberHandler}
             tabIndex={!user ? -1 : 0}
           />
         </Flex>
       </StyledWrapper>
       <Button
-        disabled={currentRadio === ''}
+        disabled={!user || currentRadio === '' || Number(bet.value) > user.balance}
         $styleType='primary'
         width='100%'
         onClick={playHandler}

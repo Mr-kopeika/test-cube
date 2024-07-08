@@ -1,11 +1,13 @@
+import { $user } from '@/shared/model'
 import { Button, Flex } from '@/shared/ui'
-import { $user, SignIn } from '@/widgets/signIn'
+import { SignIn } from '@/widgets/signIn'
 import { useUnit } from 'effector-react'
 import { useState } from 'react'
 import styled from 'styled-components'
 
 const StyledWrapper = styled.div`
   position: absolute;
+  z-index: 10;
   width: 100vw;
   top: 0;
   left: 0;

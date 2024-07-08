@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IUser, ILoginData } from '../model/User'
+import { IUser, ILoginData } from '../../../shared/model/User'
 
 export async function login(params: ILoginData) {
   const { data } = await axios.post<IUser>(

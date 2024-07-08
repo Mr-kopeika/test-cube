@@ -8,10 +8,10 @@ type ComponentProps = {
   radioValue: string
   selectValue?: string
   onRadioChange?: React.ChangeEventHandler<HTMLInputElement>
-  onSelectChange?: () => void
+  onSelectChange?: React.ChangeEventHandler<HTMLSelectElement>
   width?: string
   currentChecked: string
-  selectOptions?: { value: number; label: string }[]
+  selectOptions?: { value: string; label: string }[]
   tabIndex?: number
 }
 
@@ -55,7 +55,6 @@ export const RadioButtonWithInput = (props: ComponentProps) => {
         value={props.radioValue}
       >
         <StyledSelect
-          defaultValue={props.selectOptions ? props.selectOptions[0].value : undefined}
           onChange={props.onSelectChange}
           value={props.selectValue}
           tabIndex={props.tabIndex}

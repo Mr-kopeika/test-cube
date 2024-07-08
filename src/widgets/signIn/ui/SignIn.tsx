@@ -1,9 +1,17 @@
 import { IUser, authWithSid, login } from '../index'
-import { $user, load, loadUserAutoFx, loadUserFx, updateBalance } from '@/widgets/signIn/model'
+
 import { Button, Flex, Modal, TextInput } from '@/shared/ui'
 import { useUnit } from 'effector-react'
 import { useEffect, useState } from 'react'
-import { $message, updateMessage, updateMessageHandler } from '@/pages/game/model'
+import {
+  $message,
+  $user,
+  load,
+  loadUserAutoFx,
+  loadUserFx,
+  updateMessage,
+  updateMessageHandler,
+} from '@/shared/model'
 
 type SignInProps = {
   active: boolean
@@ -11,22 +19,16 @@ type SignInProps = {
 }
 
 export const loadUserHandler = (_: IUser | null, user: IUser) => {
-  user.balance = 100
+  user.balance = 100.0
   return user
-}
-export const updateBalanceHandler = (store: IUser | null, newBalance: number) => {
-  if (store) store.balance = newBalance
-  return store
 }
 
 loadUserFx.use(login)
 loadUserAutoFx.use(authWithSid)
 
 $user.on(load, loadUserHandler)
-$user.on(updateBalance, updateBalanceHandler)
 $user.on(loadUserFx.doneData, loadUserHandler)
 $user.on(loadUserAutoFx.doneData, loadUserHandler)
-
 $message.on(updateMessage, updateMessageHandler)
 
 export const SignIn = (props: SignInProps) => {
