@@ -74,15 +74,19 @@ export const CubeGame = () => {
   const [currentRadio, setCurrentRadio] = useState('')
   const [selectedNumber, setSelectedValue] = useState(cubeNumberOptions[0].value)
   const [bet, setBet] = useState(betOptions[0])
+  const [animation, setAnimation] = useState(false)
+  const disableButton =
+    !user || currentRadio === '' || Number(bet.value) > user.balance || animation
 
   const playHandler = () => {
     const newValue = Math.floor(Math.random() * 6) + 1
     setCubeValue(newValue)
     setReRoll(!reRoll)
-
+    setAnimation(true)
     setTimeout(() => {
       updateMessageFn('Результат броска кубика: ' + newValue)
       calculateNewBalance(newValue)
+      setAnimation(false)
     }, 700)
   }
 
@@ -192,12 +196,7 @@ export const CubeGame = () => {
           />
         </Flex>
       </StyledWrapper>
-      <Button
-        disabled={!user || currentRadio === '' || Number(bet.value) > user.balance}
-        $styleType='primary'
-        width='100%'
-        onClick={playHandler}
-      >
+      <Button disabled={disableButton} $styleType='primary' width='100%' onClick={playHandler}>
         Сделать ставку
       </Button>
     </StyledFlex>
