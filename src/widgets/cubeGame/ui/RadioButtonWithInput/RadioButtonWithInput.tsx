@@ -12,6 +12,7 @@ type ComponentProps = {
   width?: string
   currentChecked: string
   selectOptions?: { value: number; label: string }[]
+  tabIndex?: number
 }
 
 const StyledWrapper = styled.div`
@@ -57,6 +58,7 @@ export const RadioButtonWithInput = (props: ComponentProps) => {
           defaultValue={props.selectOptions ? props.selectOptions[0].value : undefined}
           onChange={props.onSelectChange}
           value={props.selectValue}
+          tabIndex={props.tabIndex}
         >
           {props.selectOptions?.map((option) => (
             <option key={option.value} value={option.value}>

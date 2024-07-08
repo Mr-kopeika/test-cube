@@ -13,7 +13,11 @@ type RadioButtonProps = {
   children?: ReactNode
 }
 
-const StyledRadioButton = styled.input<{ $textAlign?: 'center' | 'left' | 'right'; width?: string; height?: string }>`
+const StyledRadioButton = styled.input<{
+  $textAlign?: 'center' | 'left' | 'right'
+  width?: string
+  height?: string
+}>`
   display: none;
 
   & + label {

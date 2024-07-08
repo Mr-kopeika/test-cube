@@ -17,8 +17,9 @@ const StyledWrapper = styled.div`
   display: none;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.5);
   pointer-events: none;
+  z-index: 10;
 
   &.active {
     display: flex;

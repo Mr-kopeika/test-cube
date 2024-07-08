@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { Center } from '../shared/ui'
-import { CubeGame } from '@/widgets/cubeGame'
+import { GamePage } from '@/pages/game/ui/GamePage'
 
 const AppWrapper = styled.div`
   background: linear-gradient(
@@ -17,9 +16,7 @@ const AppWrapper = styled.div`
 function App() {
   return (
     <AppWrapper>
-      <Center>
-        <CubeGame />
-      </Center>
+      <GamePage />
     </AppWrapper>
   )
 }

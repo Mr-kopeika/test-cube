@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 import { styled } from 'styled-components'
 
 type ButtonProps = {
-  onClick: React.MouseEventHandler<HTMLButtonElement>
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
   $styleType?: 'primary' | 'default'
   children?: ReactNode
   width?: string

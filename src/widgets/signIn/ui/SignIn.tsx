@@ -1,8 +1,9 @@
-import { IUser, authWithSid, login } from '@/entities/user'
-import { $user, load, loadUserAutoFx, loadUserFx, updateBalance } from '@/entities/user/model'
+import { IUser, authWithSid, login } from '../index'
+import { $user, load, loadUserAutoFx, loadUserFx, updateBalance } from '@/widgets/signIn/model'
 import { Button, Flex, Modal, TextInput } from '@/shared/ui'
 import { useUnit } from 'effector-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { $message, updateMessage, updateMessageHandler } from '@/pages/game/model'
 
 type SignInProps = {
   active: boolean
@@ -26,15 +27,28 @@ $user.on(updateBalance, updateBalanceHandler)
 $user.on(loadUserFx.doneData, loadUserHandler)
 $user.on(loadUserAutoFx.doneData, loadUserHandler)
 
+$message.on(updateMessage, updateMessageHandler)
+
 export const SignIn = (props: SignInProps) => {
+  const messageFn = useUnit(updateMessage)
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')
   const [submited, setSubmited] = useState(false)
-  const [loadUserFn] = useUnit([loadUserFx])
+  const [loadUserFn, loadUserAutoFn] = useUnit([loadUserFx, loadUserAutoFx])
+
+  useEffect(() => {
+    loadUserAutoFn().then(
+      () => messageFn('Сделайте ставку'),
+      () => messageFn('Войдите, чтобы продолжить'),
+    )
+  }, [])
 
   function signInHandler() {
     if (login && password) {
-      loadUserFn({ login, password })
+      loadUserFn({ login, password }).then(() => {
+        props.setActive(false)
+        messageFn('Сделайте ставку')
+      })
       setSubmited(false)
     }
     setSubmited(true)

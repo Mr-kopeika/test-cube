@@ -1,16 +1,17 @@
-import { mainTheme } from "@/shared/config/theme";
-import ReactSelect from "react-select";
+import { mainTheme } from '@/shared/config/theme'
+import ReactSelect from 'react-select'
 
 type SelectProps = {
-  $options?: { label: string, value: string }[];
-  width?: string;
-  height?: string;
+  $options?: { label: string; value: string }[]
+  width?: string
+  height?: string
+  tabIndex?: number
 }
 
 export const Select = (props: SelectProps) => {
-
   return (
     <ReactSelect
+      tabIndex={props.tabIndex}
       options={props.$options}
       defaultValue={props.$options ? props.$options[0] : undefined}
       styles={{
@@ -38,9 +39,7 @@ export const Select = (props: SelectProps) => {
         control: (baseStyles, state) => ({
           ...baseStyles,
           height: '40px',
-          borderColor: state.isFocused
-            ? mainTheme.colors.focusOutlined
-            : 'none',
+          borderColor: state.isFocused ? mainTheme.colors.focusOutlined : 'none',
           borderRadius: '6px',
         }),
         container: (baseStyles) => ({
@@ -53,6 +52,7 @@ export const Select = (props: SelectProps) => {
           border: `1px solid ${mainTheme.colors.focusOutlined}`,
           borderRadius: '6px',
         }),
-      }} />
+      }}
+    />
   )
 }
